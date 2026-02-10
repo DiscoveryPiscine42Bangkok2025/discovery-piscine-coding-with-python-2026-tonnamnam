@@ -8,7 +8,7 @@ else:
         j = 0
         result = "Table de " + str(i) + " :"
         while j <= 10:
-            result += " " + str(i * j)
-            j += 1
+            result = result + " " + str(i * j)
+            j = j + 1
         print(result)
-        i += 1
+        i = i + 1
