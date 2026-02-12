@@ -27,16 +27,39 @@ def normalizeBoard(board):
     alp = "KPRBQ"
     return [[ch if ch in alp else "." for ch in row] for row in board]
 
-def check_pawn():
+def check_pawn(board, row, col, king_row, king_col):
+    if row - 1 == king_row and col - 1 == king_col:
+        return True
+    if row - 1 == king_row and col + 1 == king_col:
+        return True
+
+    return False
+
+def check_rook(board, row, col, king_row, king_col):
+    if col == king_col:
+        step = 1 if king_row > row else -1
+        r = row + step
+        while r != king_row:
+            if board[r][col] != ".":
+                return False
+            r += step
+        return True
+
+    if row == king_row:
+        step = 1 if king_col > col else -1
+        c = col + step
+        while c != king_col:
+            if board[row][c] != ".":
+                return False
+            c += step
+        return True
+    
+    return False
+
+def check_bishop(board, row, col, king_row, king_col):
     return ...
 
-def check_rook():
-    return ...
-
-def check_bishop():
-    return ...
-
-def check_queen():
+def check_queen(board, row, col, king_row, king_col):
     return ...
 
 def checkmate(board_str):
@@ -47,4 +70,29 @@ def checkmate(board_str):
     lines = board_str.strip("\n").split("\n")
     board = normalizeBoard(lines)
 
-    print(board)
+    size = len(board)
+
+    king_row = -1
+    king_col = -1
+
+    for r in range(size):
+        for c in range(size):
+            if board[r][c] == "K":
+                king_row = r
+                king_col = c
+
+    for r in range(size):
+        for c in range(size):
+            piece = board[r][c]
+
+            if piece == "P":
+                if check_pawn(board, r, c, king_row, king_col):
+                    print("Success")
+                    return
+
+            if piece == "R":
+                if check_rook(board, r, c, king_row, king_col):
+                    print("Success")
+                    return
+
+    print("Fail")
