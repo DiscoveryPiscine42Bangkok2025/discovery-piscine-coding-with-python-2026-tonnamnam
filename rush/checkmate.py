@@ -57,10 +57,29 @@ def check_rook(board, row, col, king_row, king_col):
     return False
 
 def check_bishop(board, row, col, king_row, king_col):
-    return ...
+    if abs(row - king_row) == abs(col - king_col):
+        row_step = 1 if king_row > row else -1
+        col_step = 1 if king_col > col else -1
+
+        r = row + row_step
+        c = col + col_step
+
+        while r != king_row and c != king_col:
+            if board[r][c] != ".":
+                return False
+            r += row_step
+            c += col_step
+
+        return True
+
+    return False
 
 def check_queen(board, row, col, king_row, king_col):
-    return ...
+    if check_rook(board, row, col, king_row, king_col) or \
+       check_bishop(board, row, col, king_row, king_col):
+        return True
+
+    return False
 
 def checkmate(board_str):
     if not validBoard(board_str):
@@ -92,6 +111,16 @@ def checkmate(board_str):
 
             if piece == "R":
                 if check_rook(board, r, c, king_row, king_col):
+                    print("Success")
+                    return
+                
+            if piece == "B":
+                if check_bishop(board, r, c, king_row, king_col):
+                    print("Success")
+                    return
+
+            if piece == "Q":
+                if check_queen(board, r, c, king_row, king_col):
                     print("Success")
                     return
 
